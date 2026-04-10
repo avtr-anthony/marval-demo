@@ -12,7 +12,19 @@ import { extractCapture, normalizeTextBlock } from "@/utils/text";
  */
 async function readDocument(fileName: string) {
   const absolutePath = path.join(process.cwd(), fileName);
-  const buffer = await fs.readFile(absolutePath);
+  let buffer: Buffer;
+
+  try {
+    buffer = await fs.readFile(absolutePath);
+  } catch (error) {
+    // Allow production builds to continue with fallback copy when the local source files are absent.
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return "";
+    }
+
+    throw error;
+  }
+
   const utf8Text = buffer.toString("utf8");
   const replacementCount = (utf8Text.match(/�/g) ?? []).length;
 
