@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: var(--color-stroke-soft);
+  }
+
+  html,
+  body {
+    min-height: 100%;
+    background: var(--color-bg);
+  }
+
+  body {
+    background-image:
+      linear-gradient(to bottom, rgba(8, 8, 9, 0.92), rgba(5, 5, 6, 0.99) 38%),
+      radial-gradient(circle at 12% -5%, rgba(255, 255, 255, 0.06), transparent 40%),
+      radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.04), transparent 36%);
+    background-attachment: scroll;
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.26);
+    color: #111111;
+  }
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  }
+
+  .font-sans {
+    font-family: var(--font-sans), "Segoe UI", sans-serif;
+  }
+
+  .scrollbar-subtle {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(163, 163, 170, 0.42) transparent;
+  }
+
+  .scrollbar-subtle::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-subtle::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-subtle::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background-color: rgba(163, 163, 170, 0.42);
+  }
+
+  .scrollbar-soft {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(163, 163, 170, 0.26) transparent;
+  }
+
+  .scrollbar-soft::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-soft::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-soft::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background-color: rgba(163, 163, 170, 0.26);
+  }
+
+  .hide-page-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hide-page-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  @keyframes marquee-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-right {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .marquee-track-left {
+    animation: marquee-left 34s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-track-right {
+    animation: marquee-right 34s linear infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track-left,
+    .marquee-track-right {
+      animation: none;
+    }
+  }
+}
