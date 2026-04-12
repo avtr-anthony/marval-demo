@@ -31,10 +31,14 @@ export function ChatShell() {
         resetConversation,
     } = useChatController();
     const consumedQueryRef = useRef<string | null>(null);
+    const hasHydratedMessagesRef = useRef(false);
     const scrollStateRef = useRef<{
         assistantCount: number;
         wasSending: boolean;
     } | null>(null);
+    const [animatedAssistantId, setAnimatedAssistantId] = useState<
+        string | null
+    >(null);
 
     /**
      * Hides the page scrollbar for chat while preserving normal page scrolling behavior.
@@ -120,6 +124,32 @@ export function ChatShell() {
     }, [messages, isSending]);
 
     /**
+     * Reveals only newly appended assistant replies and skips persisted history on first render.
+     */
+    useEffect(() => {
+        if (!hasHydratedMessagesRef.current) {
+            hasHydratedMessagesRef.current = true;
+            return;
+        }
+
+        const latestMessage = messages.at(-1);
+        if (!latestMessage || latestMessage.role !== 'assistant') {
+            return;
+        }
+
+        setAnimatedAssistantId(latestMessage.id);
+        const timeoutId = window.setTimeout(() => {
+            setAnimatedAssistantId(current =>
+                current === latestMessage.id ? null : current,
+            );
+        }, 950);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+        };
+    }, [messages]);
+
+    /**
      * Sends current draft and clears input when network call starts.
      */
     const handleSubmit = async () => {
@@ -162,6 +192,9 @@ export function ChatShell() {
                             <MessageBubble
                                 key={message.id}
                                 message={message}
+                                animateAssistantResponse={
+                                    message.id === animatedAssistantId
+                                }
                             />
                         ))}
                         {isSending ? <TypingIndicator /> : null}

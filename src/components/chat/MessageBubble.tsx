@@ -3,12 +3,16 @@ import { cn } from '@/utils/cn';
 
 interface MessageBubbleProps {
     message: ChatMessage;
+    animateAssistantResponse?: boolean;
 }
 
 /**
  * Renders one chat message with different visual treatment for user and assistant roles.
  */
-export function MessageBubble({ message }: MessageBubbleProps) {
+export function MessageBubble({
+    message,
+    animateAssistantResponse = false,
+}: MessageBubbleProps) {
     const isUser = message.role === 'user';
 
     return (
@@ -24,6 +28,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                     isUser
                         ? '!border-/10 bg-white/90 text-black'
                         : '!border-white/5 bg-[#040405]/20 backdrop-blur-sm text-ink',
+                    !isUser && animateAssistantResponse && 'assistant-response-enter',
                 )}
             >
                 <p className="whitespace-pre-wrap break-words leading-6">
