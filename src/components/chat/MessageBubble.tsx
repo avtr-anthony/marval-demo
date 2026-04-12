@@ -23,7 +23,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                     'max-w-[92%] rounded-card border  px-4 py-3 text-[13px] leading-relaxed shadow-ambient-sm [overflow-wrap:anywhere] sm:max-w-[80%] sm:text-sm',
                     isUser
                         ? '!border-/10 bg-white/90 text-black'
-                        : '!border-white/10 bg-[#040405]/80 backdrop-blur-sm text-ink',
+                        : '!border-white/5 bg-[#040405]/20 backdrop-blur-sm text-ink',
                 )}
             >
                 <p className="whitespace-pre-wrap break-words leading-6">
