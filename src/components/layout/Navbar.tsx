@@ -16,17 +16,17 @@ export function Navbar() {
                         compact
                         plainIcon
                     />
-                    {/* <nav className="hidden items-center gap-7 md:flex">
+                    <nav className="hidden items-center gap-7 md:flex">
                         {siteConfig.navigation.map(item => (
                             <a
+                                className="text-sm font-medium text-[#cfd4dc] transition-colors hover:text-white cursor-pointer"
                                 key={item.href}
                                 href={item.href}
-                                className="text-sm font-medium text-[#cfd4dc] transition-colors hover:text-white"
                             >
                                 {item.label}
                             </a>
                         ))}
-                    </nav> */}
+                    </nav>
                     <ActionLink
                         href={siteConfig.routes.chat}
                         className="px-4 py-2 text-xs sm:text-sm"

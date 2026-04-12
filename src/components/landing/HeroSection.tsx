@@ -32,7 +32,7 @@ export function HeroSection({
                     delayMs={80}
                     className="space-y-7 text-center"
                 >
-                    <PillBadge className="hero-badge">{badge}</PillBadge>
+                    {/* <PillBadge className="hero-badge">{badge}</PillBadge> */}
                     <h1 className="hero-title font-serif text-[clamp(2.2rem,5vw,4.7rem)] leading-[1.06]">
                         {title}
                     </h1>

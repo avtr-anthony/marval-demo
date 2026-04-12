@@ -13,6 +13,7 @@ export const siteConfig = {
         // { label: "Capacidades", href: "#capacidades" },
         // { label: "Normativa", href: "#normativa" },
         // { label: 'FAQ', href: '#faq' },
+        { label: 'Demo', href: '/' },
     ],
     endpoint: {
         chat: process.env.NEXT_PUBLIC_CHAT_ENDPOINT ?? '',
