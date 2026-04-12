@@ -14,7 +14,7 @@ interface FooterProps {
  */
 export function Footer({ legalSources }: FooterProps) {
   return (
-    <footer className="border-t border-stroke-soft bg-panel/30 py-14">
+    <footer className="border-t border-stroke-soft bg-transparent py-14">
       <Container as="div" className="space-y-10">
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="space-y-4">

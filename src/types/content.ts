@@ -47,7 +47,7 @@ export interface LandingContent {
     description: string;
     pillars: ValuePillar[];
   };
-  capabilities: Capability[];
+  capabilities: Capability[] | null;
   normativeHighlights: NormativeHighlight[];
   visualPanels: PlaceholderPanel[];
   faq: FaqItem[];

@@ -10,17 +10,14 @@
   html,
   body {
     min-height: 100%;
-    background: var(--color-bg);
+    background: #050506;
+    background-color: #050506;
   }
 
   body {
-    background-image:
-      linear-gradient(to bottom, rgba(8, 8, 9, 0.92), rgba(5, 5, 6, 0.99) 38%),
-      radial-gradient(circle at 12% -5%, rgba(255, 255, 255, 0.06), transparent 40%),
-      radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.04), transparent 36%);
-    background-attachment: scroll;
     color: var(--color-ink);
   }
+
 
   ::selection {
     background: rgba(255, 255, 255, 0.26);
@@ -28,7 +25,251 @@
   }
 }
 
+@layer components {
+  .app-gradient {
+    background: var(--color-bg);
+    background-image:
+      radial-gradient(ellipse 90% 55% at 50% -5%, rgba(18, 55, 120, 0.50) 0%, rgba(10, 30, 70, 0.28) 38%, transparent 68%),
+      radial-gradient(ellipse 65% 45% at 25% 18%, rgba(14, 42, 95, 0.20) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 40% at 78% 12%, rgba(16, 48, 105, 0.15) 0%, transparent 50%),
+      linear-gradient(to bottom, #07080c 0%, #050506 35%, #040405 100%);
+  }
+}
+
 @layer utilities {
+  .page-background {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .landing-main {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .chat-main {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    background-size: 100% 220vh;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+
+  /* --- Chat entrance animations --- */
+  @keyframes chat-slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes chat-composer-expand {
+    from {
+      opacity: 0;
+      transform: translateY(-40px) scale(0.92);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes chat-content-fade {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes chat-opacity-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes chat-composer-frame-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-36px) scaleX(0.94) scaleY(0.6);
+    }
+
+    60% {
+      opacity: 0.95;
+      transform: translateY(0) scaleX(1) scaleY(1);
+    }
+
+    to {
+      opacity: 0;
+      transform: translateY(0) scaleX(1) scaleY(1);
+    }
+  }
+
+  @keyframes chat-composer-shell-reveal {
+    from {
+      opacity: 0;
+      border-color: rgba(255, 255, 255, 0);
+      background-color: rgba(4, 4, 5, 0.9);
+
+    }
+
+    via {
+      opacity: 0.5;
+      border-color: rgba(150, 150, 150, 0.1);
+      background-color: rgba(4, 4, 5, 0.9);
+    }
+
+    to {
+      opacity: 1;
+      border-color: rgba(150, 150, 150, 0.1);
+      background-color: rgba(4, 4, 5, 0.9);
+    }
+  }
+
+  .chat-header-entrance {
+    animation: chat-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .chat-content-entrance {
+    animation: chat-content-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+
+  .chat-composer-entrance {
+    animation: none;
+  }
+
+  .chat-composer-motion {
+    animation: none;
+  }
+
+  .chat-composer-stage {
+    position: relative;
+  }
+
+  .chat-composer-frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-panel);
+    background-color: transparent;
+    transform-origin: top center;
+    animation: chat-composer-frame-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+
+  .chat-composer-fade {
+    animation: none;
+  }
+
+  .chat-composer-content {
+    animation: none;
+  }
+
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .chat-header-entrance,
+    .chat-content-entrance,
+    .chat-composer-entrance,
+    .chat-composer-motion,
+    .chat-composer-stage,
+    .chat-composer-frame,
+    .chat-composer-fade,
+    .chat-composer-content {
+      animation: none;
+    }
+  }
+
+  .hero-section-shell {
+    background: transparent;
+  }
+
+  .hero-badge {
+    border-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
+    background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent);
+  }
+
+  .hero-title {
+    color: var(--color-ink);
+  }
+
+  .hero-subtitle {
+    color: var(--color-ink-dim);
+  }
+
+  .hero-meta-pill {
+    border-color: color-mix(in srgb, var(--color-stroke-soft) 80%, transparent);
+    background-color: transparent;
+    color: var(--color-ink);
+  }
+
+  .hero-prompt-shell {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.05);
+    background-color: transparent;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .chat-composer-shell {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    opacity: 0;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(150, 150, 150, 0.1);
+    animation: chat-composer-shell-reveal 0.26s ease-out 0.5s both;
+  }
+
+
+
+  .hero-prompt-label {
+    color: var(--color-ink-dim);
+  }
+
+  .hero-prompt-input {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.04);
+    background-color: transparent;
+    color: var(--hero-prompt-input-text);
+  }
+
+  .hero-prompt-input::placeholder {
+    color: var(--hero-prompt-input-placeholder);
+  }
+
+  .hero-prompt-submit {
+    background-color: var(--hero-cta-bg);
+    color: var(--hero-cta-text);
+  }
+
+  .hero-prompt-submit:hover {
+    background-color: var(--hero-cta-bg-hover);
+  }
+
+
+
   .font-serif {
     font-family: var(--font-serif), Georgia, "Times New Roman", serif;
   }
@@ -90,6 +331,7 @@
     0% {
       transform: translateX(0);
     }
+
     100% {
       transform: translateX(-50%);
     }
@@ -99,6 +341,7 @@
     0% {
       transform: translateX(-50%);
     }
+
     100% {
       transform: translateX(0);
     }
@@ -115,6 +358,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+
     .marquee-track-left,
     .marquee-track-right {
       animation: none;
