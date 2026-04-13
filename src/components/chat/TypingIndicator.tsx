@@ -6,7 +6,7 @@ import { LoaderCircle } from 'lucide-react';
 export function TypingIndicator() {
     return (
         <div className="flex justify-start">
-            <div className="inline-flex items-center gap-3 rounded-card border border-stroke-soft bg-panel px-4 py-3 text-[13px] text-ink-dim sm:text-sm">
+            <div className="inline-flex items-center gap-3 rounded-card border border-stroke-soft bg-[var(--assistant-response-bg)] px-4 py-3 text-[13px] text-ink-dim shadow-ambient-sm backdrop-blur-sm sm:text-sm">
                 <LoaderCircle
                     size={16}
                     className="animate-spin text-ink-dim"
