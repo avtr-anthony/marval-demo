@@ -19,13 +19,13 @@ const serif = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: `${siteConfig.brand.name} | Demo Frontend`,
+  title: "Marval",
   description:
     "Demo institucional en Next.js para consultas tributarias de Neuquén con landing premium y chat full screen.",
   icons: {
-    icon: "/nqn-logo.png",
-    shortcut: "/nqn-logo.png",
-    apple: "/nqn-logo.png"
+    icon: "/logo-met.png",
+    shortcut: "/logo-met.png",
+    apple: "/logo-met.png"
   }
 };
 

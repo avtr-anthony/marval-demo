@@ -6,7 +6,7 @@ import { RefreshCw } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useChatController } from '@/hooks/use-chat-controller';
-import { pickRandomChatStarterPrompts } from '@/constants/chat-starter-prompts';
+import { chatStorageKey } from '@/store/chat-store';
 
 import { BrandLogo } from '../layout/BrandLogo';
 import { ThemeToggle } from '../theme/ThemeToggle';
@@ -19,12 +19,17 @@ import { TypingIndicator } from './TypingIndicator';
 /**
  * Fullscreen chat experience with persistent history, retry flow and loading states.
  */
-export function ChatShell() {
+interface ChatShellProps {
+    starterPrompts: string[];
+}
+
+export function ChatShell({ starterPrompts }: ChatShellProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [draft, setDraft] = useState('');
-    const [starterPrompts] = useState(() => pickRandomChatStarterPrompts(3));
+    const initialHeroQuestionRef = useRef(searchParams.get('q')?.trim() ?? null);
+    const hasInitializedChatRef = useRef(false);
     const {
         messages,
         isSending,
@@ -70,24 +75,29 @@ export function ChatShell() {
     }, []);
 
     /**
-     * Consumes a hero question once, sends it to the chat endpoint, and then cleans the URL.
+     * Always starts the chat route with a fresh conversation.
+     * If the landing passed ?q=..., that query becomes the first message of the new chat.
      */
     useEffect(() => {
-        const heroQuestion = searchParams.get('q')?.trim();
+        if (hasInitializedChatRef.current) {
+            return;
+        }
 
-        if (
-            !heroQuestion ||
-            consumedQueryRef.current === heroQuestion ||
-            isSending
-        ) {
+        hasInitializedChatRef.current = true;
+        cancelPendingRequest();
+        window.localStorage.removeItem(chatStorageKey);
+        resetConversation();
+        setDraft('');
+
+        const heroQuestion = initialHeroQuestionRef.current;
+        if (!heroQuestion) {
             return;
         }
 
         consumedQueryRef.current = heroQuestion;
-        setDraft('');
         void submitMessage(heroQuestion);
         router.replace(pathname);
-    }, [isSending, pathname, router, searchParams, submitMessage]);
+    }, [cancelPendingRequest, pathname, resetConversation, router, submitMessage]);
 
     /**
      * Smoothly scrolls down when the typing state appears and when a new assistant reply is appended.
@@ -192,11 +202,12 @@ export function ChatShell() {
     const handleBackToHome = (event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
         cancelPendingRequest();
+        window.localStorage.removeItem(chatStorageKey);
         resetConversation();
         router.push('/');
     };
 
-    const hasIncomingHeroQuestion = Boolean(searchParams.get('q')?.trim());
+    const hasIncomingHeroQuestion = Boolean(initialHeroQuestionRef.current);
     const isEmptyState =
         messages.length === 0 && !isSending && !hasIncomingHeroQuestion;
 

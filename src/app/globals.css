@@ -357,6 +357,14 @@
     font-family: var(--font-sans), "Segoe UI", sans-serif;
   }
 
+  .brand-logo-image {
+    transition: filter 180ms ease;
+  }
+
+  [data-theme='light'] .brand-logo-image {
+    filter: brightness(0) saturate(100%);
+  }
+
   .scrollbar-soft {
     scrollbar-width: thin;
     scrollbar-color: rgba(163, 163, 170, 0.26) transparent;
