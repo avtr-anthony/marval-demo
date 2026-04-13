@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { siteConfig } from '@/config/site';
 
 import { ActionButton } from '../ui/ActionButton';
+import styles from '../ui/PromptSurface.module.css';
 
 interface HeroChatPromptProps {
     placeholder: string;
@@ -64,26 +65,24 @@ export function HeroChatPrompt({ placeholder }: HeroChatPromptProps) {
     return (
         <form
             onSubmit={handleSubmit}
-            className="hero-prompt-shell rounded-panel p-3 sm:p-4"
+            className={`${styles.shell} shadow-xl`}
         >
-            <p className="hero-prompt-label mb-3 text-left text-xs font-semibold uppercase tracking-[0.14em]">
-                Consulta guiada
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-                <div className="min-w-0 flex-1">
+            <p className={styles.label}>Consulta guiada</p>
+            <div className={styles.row}>
+                <div className={`${styles.field}`}>
                     <textarea
                         value={value}
                         onChange={event => setValue(event.target.value)}
                         onKeyDown={handleKeyDown}
                         rows={2}
                         placeholder={placeholder}
-                        className="hero-prompt-input max-h-44 min-h-14 w-full resize-none overflow-y-auto rounded-card px-4 py-3 text-[13px] outline-none [overflow-wrap:anywhere] scrollbar-soft sm:text-sm"
+                        className={`${styles.textarea} max-h-44 overflow-y-auto outline-none [overflow-wrap:anywhere] scrollbar-soft`}
                     />
                 </div>
                 <ActionButton
                     type="submit"
                     disabled={!value.trim()}
-                    className="hero-prompt-submit h-12 shrink-0 gap-2 px-5 text-xs sm:text-sm"
+                    className={styles.submit}
                     aria-label="Enviar pregunta"
                 >
                     Enviar

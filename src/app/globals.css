@@ -3,6 +3,120 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: dark;
+    --color-bg: #050506;
+    --color-panel: #0f1012;
+    --color-panel-soft: #17181b;
+    --color-stroke-soft: rgba(255, 255, 255, 0.14);
+    --color-ink: #f5f5f5;
+    --color-ink-dim: #adadb3;
+    --color-accent: #f2f2f2;
+    --color-accent-soft: rgba(255, 255, 255, 0.16);
+    --color-accent-contrast: #111111;
+    --color-success: #b8e0c8;
+    --color-warning: #e8cfad;
+    --color-danger: #efb0b0;
+    --hero-prompt-input-bg: rgba(255, 255, 255, 0.02);
+    --hero-prompt-input-text: #ffffff;
+    --hero-prompt-input-placeholder: rgba(195, 200, 210, 0.6);
+    --hero-prompt-input-border: rgba(255, 255, 255, 0.04);
+    --hero-prompt-shell-border: rgba(255, 255, 255, 0.05);
+    --hero-prompt-shell-bg: rgba(4, 4, 5, 0.62);
+    --hero-cta-bg: #d5d5d8;
+    --hero-cta-bg-hover: #e2e2e4;
+    --hero-cta-text: #111111;
+    --chat-suggestion-bg: #121a28;
+    --chat-suggestion-bg-hover: #1a2740;
+    --chat-suggestion-text: #f5f5f5;
+    --chat-suggestion-text-hover: #ffffff;
+    --landing-base-start: #07080c;
+    --landing-base-mid: #050506;
+    --landing-base-end: #040405;
+    --landing-glow-primary: rgba(18, 55, 120, 0.5);
+    --landing-glow-secondary: rgba(14, 42, 95, 0.2);
+    --landing-glow-tertiary: rgba(16, 48, 105, 0.15);
+    --navbar-bg: rgba(7, 9, 13, 0.42);
+    --navbar-border: rgba(255, 255, 255, 0.1);
+    --navbar-text: #cfd4dc;
+    --navbar-text-hover: #ffffff;
+    --theme-toggle-bg: rgba(255, 255, 255, 0.02);
+    --theme-toggle-border: rgba(255, 255, 255, 0.08);
+    --theme-toggle-icon: #f5f5f5;
+    --faq-badge-bg: #ffffff;
+    --faq-badge-text: #111111;
+    --faq-divider: rgba(255, 255, 255, 0.1);
+    --chat-header-bg: rgba(4, 4, 5, 0.15);
+    --chat-header-border: rgba(255, 255, 255, 0.1);
+    --composer-frame-border: rgba(255, 255, 255, 0.05);
+    --composer-shell-border: rgba(150, 150, 150, 0.1);
+    --composer-shell-bg: rgba(4, 4, 5, 0.9);
+    --assistant-response-bg: #121a28;
+    --selection-bg: rgba(255, 255, 255, 0.26);
+    --selection-text: #111111;
+    --radius-pill: 999px;
+    --radius-card: 20px;
+    --radius-panel: 28px;
+    --shadow-ambient-xl: 0 28px 80px -28px rgba(0, 0, 0, 0.8);
+    --shadow-ambient-lg: 0 20px 45px -30px rgba(0, 0, 0, 0.8);
+    --shadow-ambient-sm: 0 10px 26px -18px rgba(0, 0, 0, 0.9);
+    --space-section-y: clamp(5rem, 8vw, 8rem);
+    --space-section-y-compact: clamp(3.5rem, 6vw, 5rem);
+  }
+
+  [data-theme='light'] {
+    color-scheme: light;
+    --color-bg: #f4f6fa;
+    --color-panel: #ffffff;
+    --color-panel-soft: #eef2f6;
+    --color-stroke-soft: rgba(18, 24, 38, 0.12);
+    --color-ink: #111827;
+    --color-ink-dim: #5c6676;
+    --color-accent: #121a28;
+    --color-accent-soft: rgba(18, 26, 40, 0.1);
+    --color-accent-contrast: #f8fafc;
+    --color-success: #2d6d4b;
+    --color-warning: #946c20;
+    --color-danger: #9b3d3d;
+    --hero-prompt-input-bg: rgba(17, 24, 39, 0.02);
+    --hero-prompt-input-text: #111827;
+    --hero-prompt-input-placeholder: rgba(74, 85, 104, 0.72);
+    --hero-prompt-input-border: rgba(18, 24, 38, 0.08);
+    --hero-prompt-shell-border: rgba(18, 24, 38, 0.08);
+    --hero-prompt-shell-bg: rgba(255, 255, 255, 0.72);
+    --hero-cta-bg: #121a28;
+    --hero-cta-bg-hover: #1d2940;
+    --hero-cta-text: #f8fafc;
+    --chat-suggestion-bg: rgba(143, 151, 165, 0.3);
+    --chat-suggestion-bg-hover: var(--hero-cta-bg);
+    --chat-suggestion-text: var(--hero-cta-bg);
+    --chat-suggestion-text-hover: var(--hero-cta-text);
+    --landing-base-start: #f9fbff;
+    --landing-base-mid: #f4f6fa;
+    --landing-base-end: #eef2f7;
+    --landing-glow-primary: rgba(111, 144, 198, 0.34);
+    --landing-glow-secondary: rgba(132, 160, 206, 0.18);
+    --landing-glow-tertiary: rgba(185, 200, 228, 0.22);
+    --navbar-bg: rgba(255, 255, 255, 0.74);
+    --navbar-border: rgba(18, 24, 38, 0.1);
+    --navbar-text: #4d5868;
+    --navbar-text-hover: #111827;
+    --theme-toggle-bg: rgba(17, 24, 39, 0.03);
+    --theme-toggle-border: rgba(18, 24, 38, 0.1);
+    --theme-toggle-icon: #111827;
+    --faq-badge-bg: #121a28;
+    --faq-badge-text: #f8fafc;
+    --faq-divider: rgba(18, 24, 38, 0.12);
+    --chat-header-bg: rgba(255, 255, 255, 0.65);
+    --chat-header-border: rgba(18, 24, 38, 0.08);
+    --composer-frame-border: rgba(18, 24, 38, 0.08);
+    --composer-shell-border: rgba(84, 104, 132, 0.18);
+    --composer-shell-bg: rgba(255, 255, 255, 0.88);
+    --assistant-response-bg: #ffffff;
+    --selection-bg: rgba(17, 24, 39, 0.16);
+    --selection-text: #111827;
+  }
+
   * {
     border-color: var(--color-stroke-soft);
   }
@@ -10,41 +124,27 @@
   html,
   body {
     min-height: 100%;
-    background: #050506;
-    background-color: #050506 !important;
+    background-color: var(--color-bg) !important;
     background-image:
-      radial-gradient(ellipse 90% 55% at 50% -5%, rgba(18, 55, 120, 0.50) 0%, rgba(10, 30, 70, 0.28) 38%, transparent 68%),
-      radial-gradient(ellipse 65% 45% at 25% 18%, rgba(14, 42, 95, 0.20) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 40% at 78% 12%, rgba(16, 48, 105, 0.15) 0%, transparent 50%),
-      linear-gradient(to bottom, #07080c 0%, #050506 35%, #040405 100%);
+      radial-gradient(ellipse 90% 55% at 50% -5%, var(--landing-glow-primary) 0%, transparent 68%),
+      radial-gradient(ellipse 65% 45% at 25% 18%, var(--landing-glow-secondary) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 40% at 78% 12%, var(--landing-glow-tertiary) 0%, transparent 50%),
+      linear-gradient(to bottom, var(--landing-base-start) 0%, var(--landing-base-mid) 35%, var(--landing-base-end) 100%);
   }
 
   body {
     color: var(--color-ink);
   }
 
-
   ::selection {
-    background: rgba(255, 255, 255, 0.26);
-    color: #111111;
+    background: var(--selection-bg);
+    color: var(--selection-text);
   }
 }
 
 @layer components {}
 
 @layer utilities {
-  .page-background {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-  }
-
-  .landing-main {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-  }
-
   .chat-main {
     position: relative;
     isolation: isolate;
@@ -53,10 +153,10 @@
     background-position: center top;
     background-repeat: no-repeat;
     background-image:
-      radial-gradient(ellipse 90% 55% at 50% -5%, rgba(18, 55, 120, 0.50) 0%, rgba(10, 30, 70, 0.28) 38%, transparent 68%),
-      radial-gradient(ellipse 65% 45% at 25% 18%, rgba(14, 42, 95, 0.20) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 40% at 78% 12%, rgba(16, 48, 105, 0.15) 0%, transparent 50%),
-      linear-gradient(to bottom, #07080c 0%, #050506 35%, #040405 100%);
+      radial-gradient(ellipse 90% 55% at 50% -5%, var(--landing-glow-primary) 0%, transparent 68%),
+      radial-gradient(ellipse 65% 45% at 25% 18%, var(--landing-glow-secondary) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 40% at 78% 12%, var(--landing-glow-tertiary) 0%, transparent 50%),
+      linear-gradient(to bottom, var(--landing-base-start) 0%, var(--landing-base-mid) 35%, var(--landing-base-end) 100%);
   }
 
   /* --- Chat entrance animations --- */
@@ -69,18 +169,6 @@
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-
-  @keyframes chat-composer-expand {
-    from {
-      opacity: 0;
-      transform: translateY(-40px) scale(0.92);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
     }
   }
 
@@ -119,16 +207,6 @@
     }
   }
 
-  @keyframes chat-opacity-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
   @keyframes chat-composer-frame-enter {
     from {
       opacity: 0;
@@ -149,21 +227,20 @@
   @keyframes chat-composer-shell-reveal {
     from {
       opacity: 0;
-      border-color: rgba(255, 255, 255, 0);
-      background-color: rgba(4, 4, 5, 0.9);
-
+      border-color: transparent;
+      background-color: color-mix(in srgb, var(--composer-shell-bg) 82%, transparent);
     }
 
     50% {
       opacity: 0.5;
-      border-color: rgba(150, 150, 150, 0.1);
-      background-color: rgba(4, 4, 5, 0.9);
+      border-color: var(--composer-shell-border);
+      background-color: var(--composer-shell-bg);
     }
 
     to {
       opacity: 1;
-      border-color: rgba(150, 150, 150, 0.1);
-      background-color: rgba(4, 4, 5, 0.9);
+      border-color: var(--composer-shell-border);
+      background-color: var(--composer-shell-bg);
     }
   }
 
@@ -191,7 +268,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--composer-frame-border);
     border-radius: var(--radius-panel);
     background-color: transparent;
     transform-origin: top center;
@@ -229,78 +306,13 @@
     }
   }
 
-  .hero-section-shell {
-    background: transparent;
-  }
-
-  .hero-badge {
-    border-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
-    background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
-    color: var(--color-accent);
-  }
-
-  .hero-title {
-    color: var(--color-ink);
-  }
-
-  .hero-subtitle {
-    color: var(--color-ink-dim);
-  }
-
-  .hero-meta-pill {
-    border-color: color-mix(in srgb, var(--color-stroke-soft) 80%, transparent);
-    background-color: transparent;
-    color: var(--color-ink);
-  }
-
-  .hero-prompt-shell {
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.05);
-    background-color: transparent;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
   .chat-composer-shell {
     position: relative;
     isolation: isolate;
     overflow: hidden;
     opacity: 0;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(150, 150, 150, 0.1);
     animation: chat-composer-shell-reveal 0.26s ease-out 0.5s both;
   }
-
-
-
-  .hero-prompt-label {
-    color: var(--color-ink-dim);
-  }
-
-  .hero-prompt-input {
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.04);
-    background-color: transparent;
-    color: var(--hero-prompt-input-text);
-  }
-
-  .hero-prompt-input::placeholder {
-    color: var(--hero-prompt-input-placeholder);
-  }
-
-  .hero-prompt-submit {
-    background-color: var(--hero-cta-bg);
-    color: var(--hero-cta-text);
-  }
-
-  .hero-prompt-submit:hover {
-    background-color: var(--hero-cta-bg-hover);
-  }
-
-
 
   .font-serif {
     font-family: var(--font-serif), Georgia, "Times New Roman", serif;
@@ -308,25 +320,6 @@
 
   .font-sans {
     font-family: var(--font-sans), "Segoe UI", sans-serif;
-  }
-
-  .scrollbar-subtle {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(163, 163, 170, 0.42) transparent;
-  }
-
-  .scrollbar-subtle::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  .scrollbar-subtle::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .scrollbar-subtle::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background-color: rgba(163, 163, 170, 0.42);
   }
 
   .scrollbar-soft {
@@ -357,43 +350,5 @@
     width: 0;
     height: 0;
     display: none;
-  }
-
-  @keyframes marquee-left {
-    0% {
-      transform: translateX(0);
-    }
-
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
-  @keyframes marquee-right {
-    0% {
-      transform: translateX(-50%);
-    }
-
-    100% {
-      transform: translateX(0);
-    }
-  }
-
-  .marquee-track-left {
-    animation: marquee-left 34s linear infinite;
-    will-change: transform;
-  }
-
-  .marquee-track-right {
-    animation: marquee-right 34s linear infinite;
-    will-change: transform;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-
-    .marquee-track-left,
-    .marquee-track-right {
-      animation: none;
-    }
   }
 }

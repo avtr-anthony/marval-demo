@@ -12,7 +12,7 @@ export function PillBadge({
     return (
         <span
             className={cn(
-                'inline-flex items-center rounded-pill border !border-white/5 !bg-transparent px-3 py-1 text-xs font-medium text-ink',
+                'inline-flex items-center rounded-pill border border-stroke-soft bg-transparent px-3 py-1 text-xs font-medium text-ink',
                 className,
             )}
             {...props}

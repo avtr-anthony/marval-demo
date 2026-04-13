@@ -1,0 +1,80 @@
+.header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+  padding-top: 18px;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  width: min(100%, 42rem);
+  height: 60px;
+  align-items: center;
+  gap: 1rem;
+  margin-inline: auto;
+  padding: 0 1rem;
+  border: 1px solid var(--navbar-border);
+  border-radius: var(--radius-pill);
+  background: var(--navbar-bg);
+  box-shadow: var(--shadow-ambient-lg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.navSlot {
+  min-width: 0;
+  justify-self: start;
+}
+
+.nav {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navLink {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--navbar-text);
+  transition: color 180ms ease;
+}
+
+.navLink:hover {
+  color: var(--navbar-text-hover);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-self: end;
+}
+
+.brand {
+  justify-self: center;
+}
+
+.chatLink {
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .shell {
+    padding-inline: 1.5rem;
+  }
+
+  .chatLink {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+}

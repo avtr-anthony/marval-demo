@@ -1,0 +1,19 @@
+.main {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.themeToggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 60;
+}
+
+@media (min-width: 640px) {
+  .themeToggle {
+    top: 1.25rem;
+    right: 1.5rem;
+  }
+}

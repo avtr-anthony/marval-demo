@@ -29,7 +29,7 @@ export function BrandLogo({
         <Link
             href={href}
             onClick={onClick}
-            className={cn('inline-flex items-center gap-3', className)}
+            className={cn('inline-flex items-center', className)}
         >
             <span
                 className={cn(
@@ -44,9 +44,9 @@ export function BrandLogo({
                 <Image
                     src="/nqn-logo.png"
                     alt={`${siteConfig.brand.name} logo`}
-                    width={26}
-                    height={26}
-                    className="h-[26px] w-[26px] object-contain"
+                    width={54}
+                    height={54}
+                    className=" object-contain"
                 />
             </span>
             {!iconOnly ? (

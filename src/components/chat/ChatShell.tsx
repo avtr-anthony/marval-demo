@@ -1,15 +1,18 @@
 'use client';
 
 import type { MouseEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useChatController } from '@/hooks/use-chat-controller';
+import { pickRandomChatStarterPrompts } from '@/constants/chat-starter-prompts';
 
 import { BrandLogo } from '../layout/BrandLogo';
+import { ThemeToggle } from '../theme/ThemeToggle';
 import { ActionButton } from '../ui/ActionButton';
 import { ChatComposer } from './ChatComposer';
+import { EmptyChatState } from './EmptyChatState';
 import { MessageBubble } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
 
@@ -21,6 +24,7 @@ export function ChatShell() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [draft, setDraft] = useState('');
+    const [starterPrompts] = useState(() => pickRandomChatStarterPrompts(3));
     const {
         messages,
         isSending,
@@ -43,13 +47,25 @@ export function ChatShell() {
     /**
      * Hides the page scrollbar for chat while preserving normal page scrolling behavior.
      */
-    useEffect(() => {
+    useLayoutEffect(() => {
+        const scrollbarOffset = Math.max(
+            0,
+            window.innerWidth - document.documentElement.clientWidth,
+        );
+
+        document.documentElement.style.setProperty(
+            '--page-scrollbar-offset',
+            `${scrollbarOffset}px`,
+        );
         document.documentElement.classList.add('hide-page-scrollbar');
         document.body.classList.add('hide-page-scrollbar');
 
         return () => {
             document.documentElement.classList.remove('hide-page-scrollbar');
             document.body.classList.remove('hide-page-scrollbar');
+            document.documentElement.style.removeProperty(
+                '--page-scrollbar-offset',
+            );
         };
     }, []);
 
@@ -163,6 +179,14 @@ export function ChatShell() {
     };
 
     /**
+     * Starts a chat directly from one of the empty-state recommendations.
+     */
+    const handleSuggestionSelect = async (content: string) => {
+        setDraft('');
+        await submitMessage(content);
+    };
+
+    /**
      * Clears the current conversation before returning to the landing page.
      */
     const handleBackToHome = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -172,53 +196,87 @@ export function ChatShell() {
         router.push('/');
     };
 
+    const hasIncomingHeroQuestion = Boolean(searchParams.get('q')?.trim());
+    const isEmptyState =
+        messages.length === 0 && !isSending && !hasIncomingHeroQuestion;
+
     return (
-        <div className="chat-main app-gradient text-ink">
-            <header className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-[#040405]/15  backdrop-blur-sm">
-                <div className="mx-auto flex h-20 max-w-4xl items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="chat-main text-ink">
+            <header
+                className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b pt-[18px] backdrop-blur-sm"
+                style={{
+                    borderColor: 'var(--chat-header-border)',
+                    backgroundColor: 'var(--navbar-bg)',
+                    paddingRight: 'var(--page-scrollbar-offset, 0px)',
+                }}
+            >
+                <div className="mx-auto grid h-[60px] max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 !pr-[38px] ">
+                    <div />
                     <BrandLogo
                         href="/"
                         plainIcon
                         onClick={handleBackToHome}
-                        className="justify-center"
+                        className="justify-self-center"
                     />
+                    <div className="justify-self-end">
+                        <ThemeToggle />
+                    </div>
                 </div>
             </header>
 
-            <main className="chat-content-entrance relative mx-auto w-full max-w-4xl px-4 !pb-28 pt-24 sm:px-6 sm:!pb-28 lg:px-8">
-                <section className="rounded-panel p-4 sm:p-6">
-                    <div className="space-y-4">
-                        {messages.map(message => (
-                            <MessageBubble
-                                key={message.id}
-                                message={message}
-                                animateAssistantResponse={
-                                    message.id === animatedAssistantId
-                                }
-                            />
-                        ))}
-                        {isSending ? <TypingIndicator /> : null}
-                        {lastError ? (
-                            <div className="rounded-card border border-danger/40 bg-danger/10 p-4">
-                                <p className="text-sm text-danger">
-                                    {lastError}
-                                </p>
-                                <ActionButton
-                                    className="mt-3 gap-2"
-                                    variant="danger"
-                                    onClick={retryLastMessage}
-                                    disabled={isSending}
-                                >
-                                    <RefreshCw size={15} />
-                                    Reintentar ultimo envio
-                                </ActionButton>
+            <div style={{ paddingRight: 'var(--page-scrollbar-offset, 0px)' }}>
+                <main
+                    className={`chat-content-entrance relative mx-auto w-full max-w-4xl px-4 !pb-28 pt-24 sm:px-6 sm:!pb-28 lg:px-8 ${
+                        isEmptyState
+                            ? 'grid min-h-[calc(100vh-13rem)] place-items-center !pb-36 pt-[12rem]'
+                            : ''
+                    }`}
+                >
+                    {isEmptyState ? (
+                        <EmptyChatState
+                            onSelectSuggestion={handleSuggestionSelect}
+                            prompts={starterPrompts}
+                            disabled={isSending}
+                        />
+                    ) : (
+                        <section className="w-full rounded-panel p-4 sm:p-6">
+                            <div className="space-y-4">
+                                {messages.map(message => (
+                                    <MessageBubble
+                                        key={message.id}
+                                        message={message}
+                                        animateAssistantResponse={
+                                            message.id === animatedAssistantId
+                                        }
+                                    />
+                                ))}
+                                {isSending ? <TypingIndicator /> : null}
+                                {lastError ? (
+                                    <div className="rounded-card border border-danger/40 bg-danger/10 p-4">
+                                        <p className="text-sm text-danger">
+                                            {lastError}
+                                        </p>
+                                        <ActionButton
+                                            className="mt-3 gap-2"
+                                            variant="danger"
+                                            onClick={retryLastMessage}
+                                            disabled={isSending}
+                                        >
+                                            <RefreshCw size={15} />
+                                            Reintentar último envío
+                                        </ActionButton>
+                                    </div>
+                                ) : null}
                             </div>
-                        ) : null}
-                    </div>
-                </section>
-            </main>
+                        </section>
+                    )}
+                </main>
+            </div>
 
-            <div className="chat-composer-entrance fixed inset-x-0 bottom-0 z-40 py-4">
+            <div
+                className="chat-composer-entrance fixed inset-x-0 bottom-0 z-40 py-4"
+                style={{ paddingRight: 'var(--page-scrollbar-offset, 0px)' }}
+            >
                 <div className="chat-composer-motion mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
                     <div className="chat-composer-stage">
                         <div

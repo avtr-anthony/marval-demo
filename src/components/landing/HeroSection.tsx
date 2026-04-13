@@ -4,6 +4,7 @@ import { Container } from '../ui/Container';
 import { PillBadge } from '../ui/PillBadge';
 import { Reveal } from '../ui/Reveal';
 import { HeroChatPrompt } from './HeroChatPrompt';
+import styles from './HeroSection.module.css';
 
 interface HeroSectionProps {
     badge: string;
@@ -15,48 +16,38 @@ interface HeroSectionProps {
 /**
  * Main hero block with institutional messaging and chat entry CTA.
  */
-export function HeroSection({
-    badge,
-    title,
-    subtitle,
-    promptHint,
-}: HeroSectionProps) {
+export function HeroSection({ title, subtitle, promptHint }: HeroSectionProps) {
     return (
-        <section className="hero-section-shell relative flex min-h-[100svh] items-center overflow-hidden pt-28 sm:pt-32">
+        <section className={styles.section}>
             <Container
                 as="div"
                 narrow
-                className="relative max-w-[68rem] pb-12 sm:pb-16"
+                className={styles.container}
             >
                 <Reveal
                     delayMs={80}
-                    className="space-y-7 text-center"
+                    className={styles.content}
                 >
-                    {/* <PillBadge className="hero-badge">{badge}</PillBadge> */}
-                    <h1 className="hero-title font-serif text-[clamp(2.2rem,5vw,4.7rem)] leading-[1.06]">
-                        {title}
-                    </h1>
-                    <p className="hero-subtitle mx-auto max-w-2xl text-base leading-relaxed sm:text-lg">
-                        {subtitle}
-                    </p>
+                    <h1 className={`${styles.title} font-serif`}>{title}</h1>
+                    <p className={styles.subtitle}>{subtitle}</p>
                 </Reveal>
 
                 <Reveal
                     delayMs={190}
-                    className="mx-auto mt-10 max-w-2xl"
+                    className={styles.prompt}
                 >
-                    <HeroChatPrompt placeholder="Escribe tu consulta..." />
+                    <HeroChatPrompt placeholder={promptHint} />
                 </Reveal>
 
                 <Reveal
                     delayMs={290}
-                    className="mt-8 flex flex-wrap items-center justify-center gap-3"
+                    className={styles.metaList}
                 >
-                    <PillBadge className="hero-meta-pill gap-2">
+                    <PillBadge className={styles.metaPill}>
                         <ShieldCheck size={14} />
                         Trazabilidad documental
                     </PillBadge>
-                    <PillBadge className="hero-meta-pill gap-2">
+                    <PillBadge className={styles.metaPill}>
                         <MessageSquare size={14} />
                         Flujo conversacional persistente
                     </PillBadge>

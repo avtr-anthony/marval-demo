@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Playfair_Display } from "next/font/google";
 
 import { siteConfig } from "@/config/site";
-import { buildThemeCssVariables } from "@/config/theme";
+import { defaultThemeMode, themeStorageKey } from "@/config/theme";
 
 import "./globals.css";
 
@@ -34,9 +34,13 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" data-theme={defaultThemeMode} suppressHydrationWarning>
       <body className={`${sans.variable} ${serif.variable} bg-bg font-sans text-ink antialiased`}>
-        <style id="theme-tokens">{buildThemeCssVariables()}</style>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var storedTheme=window.localStorage.getItem('${themeStorageKey}');var theme=storedTheme==='light'||storedTheme==='dark'?storedTheme:'${defaultThemeMode}';document.documentElement.dataset.theme=theme;}catch(error){document.documentElement.dataset.theme='${defaultThemeMode}';}})();`
+          }}
+        />
         {children}
       </body>
     </html>

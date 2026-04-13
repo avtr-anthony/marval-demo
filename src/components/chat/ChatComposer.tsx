@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { SendHorizontal } from 'lucide-react';
 
 import { ActionButton } from '../ui/ActionButton';
+import styles from '../ui/PromptSurface.module.css';
 
 interface ChatComposerProps {
     value: string;
@@ -72,7 +73,7 @@ export function ChatComposer({
     return (
         <form
             onSubmit={handleSubmit}
-            className="chat-composer-shell relative z-[1] rounded-panel p-3 sm:p-4  backdrop-blur-sm"
+            className={`chat-composer-shell ${styles.shell} relative z-[1]`}
         >
             <div className="chat-composer-fade">
                 <div className="chat-composer-content flex items-end gap-3">
@@ -83,12 +84,12 @@ export function ChatComposer({
                         onKeyDown={handleKeyDown}
                         rows={2}
                         placeholder="Escribe tu consulta..."
-                        className="hero-prompt-input min-h-14 w-full resize-none rounded-card px-4 py-3 text-[13px] outline-none [overflow-wrap:anywhere] scrollbar-soft sm:text-sm"
+                        className={`${styles.textarea} outline-none [overflow-wrap:anywhere] scrollbar-soft`}
                     />
                     <ActionButton
                         type="submit"
                         disabled={disabled || !value.trim()}
-                        className="hero-prompt-submit h-12 shrink-0 gap-2 px-5 text-xs sm:text-sm"
+                        className={styles.submit}
                         aria-label="Enviar mensaje"
                     >
                         Enviar

@@ -49,16 +49,28 @@ function firstCapture(text: string, patterns: RegExp[], fallback: string) {
   return fallback;
 }
 
-/**
- * Builds a content model for the landing by synthesizing key facts from local legal documents.
- */
-export async function buildLandingContent(): Promise<LandingContent> {
+async function loadDocumentCorpus() {
   const [fiscalCode, taxLaw, regularizationDecree, extensionDecree] = await Promise.all([
     readDocument(documentFiles.fiscalCode),
     readDocument(documentFiles.taxLaw),
     readDocument(documentFiles.regularizationDecree),
     readDocument(documentFiles.extensionDecree)
   ]);
+
+  return {
+    fiscalCode,
+    taxLaw,
+    regularizationDecree,
+    extensionDecree
+  };
+}
+
+/**
+ * Builds a content model for the landing by synthesizing key facts from local legal documents.
+ */
+export async function buildLandingContent(): Promise<LandingContent> {
+  const { fiscalCode, taxLaw, regularizationDecree, extensionDecree } =
+    await loadDocumentCorpus();
 
   const article6Snippet = firstCapture(
     fiscalCode,
@@ -102,7 +114,7 @@ export async function buildLandingContent(): Promise<LandingContent> {
       title: "Asistencia fiscal clara en Neuquén",
       subtitle:
         "Landing y chat full screen enfocados en Código Fiscal, Ley Impositiva y regímenes de regularización. Enfoque jurídico, tono sobrio y respuestas orientadas a gestión tributaria real.",
-      promptHint: "Hazme una pregunta dificil"
+      promptHint: "Escribe una pregunta compleja"
     },
     trustStrip: [
       "Código Fiscal Ley 2680 (modificaciones al 2024)",
@@ -252,7 +264,7 @@ export async function buildLandingContent(): Promise<LandingContent> {
       }
     ],
     finalCta: {
-      title: "Ingresá al chat y validá un caso concreto en segundos",
+      title: "Accede al chat y valida un caso concreto en segundos",
       description:
         "La conversación mantiene historial e id único para continuar análisis al volver a la landing.",
       primaryButton: "Abrir chat fiscal"
