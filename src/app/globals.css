@@ -5,7 +5,7 @@
 @layer base {
   :root {
     color-scheme: dark;
-    --color-bg: #050506;
+    --color-bg: #040405;
     --color-panel: #0f1012;
     --color-panel-soft: #17181b;
     --color-stroke-soft: rgba(255, 255, 255, 0.14);
@@ -31,7 +31,7 @@
     --chat-suggestion-text: #f5f5f5;
     --chat-suggestion-text-hover: #ffffff;
     --landing-base-start: #07080c;
-    --landing-base-mid: #050506;
+    --landing-base-mid: #040405;
     --landing-base-end: #040405;
     --landing-glow-primary: rgba(18, 55, 120, 0.5);
     --landing-glow-secondary: rgba(14, 42, 95, 0.2);
