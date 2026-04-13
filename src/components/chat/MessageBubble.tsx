@@ -26,7 +26,7 @@ export function MessageBubble({
                 className={cn(
                     'max-w-[92%] rounded-card border  px-4 py-3 text-[13px] leading-relaxed shadow-ambient-sm [overflow-wrap:anywhere] sm:max-w-[80%] sm:text-sm',
                     isUser
-                        ? 'border-stroke-soft bg-accent text-[var(--color-accent-contrast)]'
+                        ? 'border-stroke-soft bg-accent text-[var(--color-accent-contrast)] selection:bg-white/30 selection:text-[var(--color-accent-contrast)]'
                         : 'border-stroke-soft bg-[var(--assistant-response-bg)] backdrop-blur-sm text-ink',
                     !isUser && animateAssistantResponse && 'assistant-response-enter',
                 )}

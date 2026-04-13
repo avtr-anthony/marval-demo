@@ -51,9 +51,9 @@
     --composer-frame-border: rgba(255, 255, 255, 0.05);
     --composer-shell-border: rgba(150, 150, 150, 0.1);
     --composer-shell-bg: rgba(4, 4, 5, 0.9);
-    --assistant-response-bg: #121a28;
-    --selection-bg: rgba(255, 255, 255, 0.26);
-    --selection-text: #111111;
+    --assistant-response-bg: var(--composer-shell-bg);
+    --selection-bg: rgba(137, 168, 224, 0.38);
+    --selection-text: #f8fafc;
     --radius-pill: 999px;
     --radius-card: 20px;
     --radius-panel: 28px;
