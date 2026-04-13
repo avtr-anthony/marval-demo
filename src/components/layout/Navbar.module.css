@@ -1,3 +1,15 @@
+@keyframes navbar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .header {
   position: fixed;
   inset-inline: 0;
@@ -21,6 +33,7 @@
   box-shadow: var(--shadow-ambient-lg);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  animation: navbar-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .navSlot {
@@ -76,5 +89,11 @@
 @media (min-width: 768px) {
   .nav {
     display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell {
+    animation: none;
   }
 }
