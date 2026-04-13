@@ -202,6 +202,10 @@ export function ChatShell() {
 
     return (
         <div className="chat-main text-ink">
+            <div className="chat-theme-toggle-fixed pr-[15px]">
+                <ThemeToggle />
+            </div>
+
             <header
                 className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b pt-[18px] backdrop-blur-sm"
                 style={{
@@ -210,7 +214,7 @@ export function ChatShell() {
                     paddingRight: 'var(--page-scrollbar-offset, 0px)',
                 }}
             >
-                <div className="mx-auto grid h-[60px] max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 !pr-[38px] ">
+                <div className="mx-auto grid h-[60px] w-full max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 !pr-[38px]">
                     <div />
                     <BrandLogo
                         href="/"
@@ -218,9 +222,7 @@ export function ChatShell() {
                         onClick={handleBackToHome}
                         className="justify-self-center"
                     />
-                    <div className="justify-self-end">
-                        <ThemeToggle />
-                    </div>
+                    <div />
                 </div>
             </header>
 

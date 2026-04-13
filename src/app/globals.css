@@ -314,6 +314,20 @@
     animation: chat-composer-shell-reveal 0.26s ease-out 0.5s both;
   }
 
+  .chat-theme-toggle-fixed {
+    position: fixed;
+    top: 1rem;
+    right: calc(1rem + var(--page-scrollbar-offset, 0px));
+    z-index: 60;
+  }
+
+  @media (min-width: 640px) {
+    .chat-theme-toggle-fixed {
+      top: 1.25rem;
+      right: calc(1.5rem + var(--page-scrollbar-offset, 0px));
+    }
+  }
+
   .font-serif {
     font-family: var(--font-serif), Georgia, "Times New Roman", serif;
   }
