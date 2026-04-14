@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { PanelLeftOpen, RefreshCw } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useChatController } from '@/hooks/use-chat-controller';
@@ -16,6 +16,7 @@ import { ChatSidebar } from './ChatSidebar';
 import { EmptyChatState } from './EmptyChatState';
 import { MessageBubble } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
+import { cn } from '@/utils/cn';
 
 /**
  * Fullscreen chat experience with persistent history, retry flow and loading states.
@@ -29,6 +30,12 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [draft, setDraft] = useState('');
+    const [introAnimationKey, setIntroAnimationKey] = useState(0);
+    const [showIntroMessages, setShowIntroMessages] = useState(
+        !searchParams.get('q')?.trim(),
+    );
+    const [hasResolvedViewportLayout, setHasResolvedViewportLayout] =
+        useState(false);
     const [isDesktopLayout, setIsDesktopLayout] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const initialHeroQuestionRef = useRef(searchParams.get('q')?.trim() ?? null);
@@ -81,12 +88,13 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
     /**
      * Uses a wider default sidebar on desktop and a collapsed rail on smaller screens.
      */
-    useEffect(() => {
+    useLayoutEffect(() => {
         const mediaQueryList = window.matchMedia('(min-width: 1024px)');
 
         const syncSidebarLayout = () => {
             const isDesktop = mediaQueryList.matches;
             setIsDesktopLayout(isDesktop);
+            setHasResolvedViewportLayout(true);
 
             if (hasInitializedSidebarRef.current) {
                 return;
@@ -136,6 +144,8 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
         window.localStorage.removeItem(chatStorageKey);
         resetConversation();
         setDraft('');
+        setShowIntroMessages(true);
+        setIntroAnimationKey(current => current + 1);
         setAnimatedAssistantId(null);
         scrollStateRef.current = null;
         consumedQueryRef.current = initialHeroQuestionRef.current;
@@ -258,15 +268,25 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
     const hasIncomingHeroQuestion = Boolean(
         initialHeroQuestionRef.current && !consumedQueryRef.current,
     );
-    const isEmptyState =
-        messages.length === 0 && !isSending && !hasIncomingHeroQuestion;
+    const isIntroOnlyState =
+        showIntroMessages &&
+        messages.length === 0 &&
+        !isSending &&
+        !hasIncomingHeroQuestion;
     const desktopSidebarWidth = isSidebarOpen ? 304 : 76;
-    const contentLeftInset = isDesktopLayout ? desktopSidebarWidth : 76;
+    const contentLeftInset = isDesktopLayout ? desktopSidebarWidth : 0;
 
     return (
-        <div className="chat-main text-ink">
+        <div
+            className={cn(
+                'chat-main text-ink',
+                !hasResolvedViewportLayout && 'opacity-0',
+            )}
+        >
             <ChatSidebar
+                isDesktopLayout={isDesktopLayout}
                 isOpen={isSidebarOpen}
+                onOpen={() => setIsSidebarOpen(true)}
                 onToggle={() => setIsSidebarOpen(current => !current)}
                 onNewChat={handleNewChat}
             />
@@ -285,7 +305,18 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
                 }}
             >
                 <div className="mx-auto grid h-[60px] w-full max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 sm:gap-4 sm:px-6">
-                    <div />
+                    <div className="flex items-center">
+                        {hasResolvedViewportLayout && !isDesktopLayout ? (
+                            <button
+                                type="button"
+                                onClick={() => setIsSidebarOpen(true)}
+                                aria-label="Mostrar barra de conversaciones"
+                                className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
+                            >
+                                <PanelLeftOpen size={18} />
+                            </button>
+                        ) : null}
+                    </div>
                     <BrandLogo
                         href="/"
                         plainIcon
@@ -307,49 +338,49 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
             >
                 <main
                     className={`chat-content-entrance relative mx-auto w-full max-w-4xl px-4 !pb-28 pt-24 sm:px-6 sm:!pb-28 lg:px-8 ${
-                        isEmptyState
-                            ? 'grid min-h-[calc(100vh-13rem)] place-items-center !pb-36 pt-[12rem]'
+                        isIntroOnlyState
+                            ? 'min-h-[calc(100vh-13rem)] !pb-36'
                             : ''
                     }`}
                 >
-                    {isEmptyState ? (
-                        <EmptyChatState
-                            onSelectSuggestion={handleSuggestionSelect}
-                            prompts={starterPrompts}
-                            disabled={isSending}
-                        />
-                    ) : (
-                        <section className="w-full rounded-panel p-4 sm:p-6">
-                            <div className="space-y-4">
-                                {messages.map(message => (
-                                    <MessageBubble
-                                        key={message.id}
-                                        message={message}
-                                        animateAssistantResponse={
-                                            message.id === animatedAssistantId
-                                        }
-                                    />
-                                ))}
-                                {isSending ? <TypingIndicator /> : null}
-                                {lastError ? (
-                                    <div className="rounded-card border border-danger/40 bg-danger/10 p-4">
-                                        <p className="text-sm text-danger">
-                                            {lastError}
-                                        </p>
-                                        <ActionButton
-                                            className="mt-3 gap-2"
-                                            variant="danger"
-                                            onClick={retryLastMessage}
-                                            disabled={isSending}
-                                        >
-                                            <RefreshCw size={15} />
-                                            Reintentar último envío
-                                        </ActionButton>
-                                    </div>
-                                ) : null}
-                            </div>
-                        </section>
-                    )}
+                    <section className="w-full rounded-panel pb-4 sm:pb-6">
+                        <div className="space-y-4">
+                            {showIntroMessages ? (
+                                <EmptyChatState
+                                    key={introAnimationKey}
+                                    onSelectSuggestion={handleSuggestionSelect}
+                                    prompts={starterPrompts}
+                                    disabled={isSending}
+                                />
+                            ) : null}
+                            {messages.map(message => (
+                                <MessageBubble
+                                    key={message.id}
+                                    message={message}
+                                    animateAssistantResponse={
+                                        message.id === animatedAssistantId
+                                    }
+                                />
+                            ))}
+                            {isSending ? <TypingIndicator /> : null}
+                            {lastError ? (
+                                <div className="rounded-card border border-danger/40 bg-danger/10 p-4">
+                                    <p className="text-sm text-danger">
+                                        {lastError}
+                                    </p>
+                                    <ActionButton
+                                        className="mt-3 gap-2"
+                                        variant="danger"
+                                        onClick={retryLastMessage}
+                                        disabled={isSending}
+                                    >
+                                        <RefreshCw size={15} />
+                                        Reintentar último envío
+                                    </ActionButton>
+                                </div>
+                            ) : null}
+                        </div>
+                    </section>
                 </main>
             </div>
 

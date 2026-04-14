@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
     ChevronRight,
@@ -13,7 +13,9 @@ import {
 import { cn } from '@/utils/cn';
 
 interface ChatSidebarProps {
+    isDesktopLayout: boolean;
     isOpen: boolean;
+    onOpen: () => void;
     onToggle: () => void;
     onNewChat: () => void;
 }
@@ -55,19 +57,48 @@ const mockConversations = [
  * Visual-only sidebar for browsing recent conversations and starting a new one.
  */
 export function ChatSidebar({
+    isDesktopLayout,
     isOpen,
+    onOpen,
     onToggle,
     onNewChat,
 }: ChatSidebarProps) {
     const [searchValue, setSearchValue] = useState('');
+    const [shouldFocusSearch, setShouldFocusSearch] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (!isOpen || !shouldFocusSearch) {
+            return;
+        }
+
+        const focusSearch = () => {
+            searchInputRef.current?.focus();
+            const length = searchInputRef.current?.value.length ?? 0;
+            searchInputRef.current?.setSelectionRange(length, length);
+            setShouldFocusSearch(false);
+        };
+
+        const animationFrameId = requestAnimationFrame(focusSearch);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [isOpen, shouldFocusSearch]);
+
+    const handleSearchShortcutClick = () => {
+        setShouldFocusSearch(true);
+        onOpen();
+    };
 
     return (
         <aside
             className={cn(
                 'fixed inset-y-0 left-0 z-50 overflow-hidden border-r backdrop-blur-xl transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
-                isOpen
-                    ? 'w-[calc(100vw-1rem)] max-w-[20rem] lg:w-[19rem] lg:max-w-none'
-                    : 'w-[4.75rem]',
+                isDesktopLayout
+                    ? isOpen
+                        ? 'w-[19rem]'
+                        : 'w-[4.75rem]'
+                    : isOpen
+                      ? 'w-screen max-w-none'
+                      : 'pointer-events-none w-0 border-r-0',
             )}
             style={{
                 borderColor: 'var(--chat-header-border)',
@@ -76,77 +107,60 @@ export function ChatSidebar({
             }}
         >
             <div className="flex h-full flex-col px-3 py-4 sm:px-4 sm:py-5">
-                <div
-                    className={cn(
-                        'flex items-center gap-3',
-                        isOpen ? 'justify-between' : 'justify-center',
-                    )}
-                >
-                    <button
-                        type="button"
-                        onClick={onToggle}
-                        aria-label={
-                            isOpen
-                                ? 'Ocultar barra de conversaciones'
-                                : 'Mostrar barra de conversaciones'
-                        }
-                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
-                    >
-                        {isOpen ? (
-                            <PanelLeftClose size={18} />
-                        ) : (
-                            <PanelLeftOpen size={18} />
-                        )}
-                    </button>
-
-                    <div
-                        className={cn(
-                            'overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
-                            isOpen ? 'w-11 opacity-100' : 'w-0 opacity-0',
-                        )}
-                    >
+                {isOpen ? (
+                    <div className="flex items-center gap-3">
                         <button
                             type="button"
-                            aria-label="Buscar conversaciones"
-                            className={cn(
-                                'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]',
-                                !isOpen && 'pointer-events-none',
-                            )}
+                            onClick={onToggle}
+                            aria-label="Ocultar barra de conversaciones"
+                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
+                        >
+                            <PanelLeftClose size={18} />
+                        </button>
+
+                        <label className="relative block flex-1">
+                            <Search
+                                size={16}
+                                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-dim"
+                            />
+                            <input
+                                ref={searchInputRef}
+                                value={searchValue}
+                                onChange={event =>
+                                    setSearchValue(event.target.value)
+                                }
+                                aria-label="Buscar conversaciones"
+                                placeholder="Buscar conversaciones"
+                                className="h-12 w-full rounded-[18px] border bg-transparent pl-11 pr-4 text-sm text-ink outline-none placeholder:text-ink-dim"
+                                style={{
+                                    borderColor: 'var(--color-stroke-soft)',
+                                    backgroundColor:
+                                        'color-mix(in srgb, var(--composer-shell-bg) 64%, transparent)',
+                                }}
+                            />
+                        </label>
+                    </div>
+                ) : isDesktopLayout ? (
+                    <div className="flex flex-col items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={onToggle}
+                            aria-label="Mostrar barra de conversaciones"
+                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
+                        >
+                            <PanelLeftOpen size={18} />
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleSearchShortcutClick}
+                            aria-label="Abrir búsqueda"
+                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
                         >
                             <Search size={18} />
                         </button>
                     </div>
-                </div>
-
-                <div
-                    className={cn(
-                        'overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
-                        isOpen
-                            ? 'mt-5 max-h-24 opacity-100'
-                            : 'mt-0 max-h-0 opacity-0',
-                    )}
-                >
-                    <label className="relative block">
-                        <Search
-                            size={16}
-                            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-dim"
-                        />
-                        <input
-                            value={searchValue}
-                            onChange={event =>
-                                setSearchValue(event.target.value)
-                            }
-                            aria-label="Buscar conversaciones"
-                            placeholder="Buscar conversaciones"
-                            className="h-12 w-full rounded-[18px] border bg-transparent pl-11 pr-4 text-sm text-ink outline-none placeholder:text-ink-dim"
-                            style={{
-                                borderColor: 'var(--color-stroke-soft)',
-                                backgroundColor:
-                                    'color-mix(in srgb, var(--composer-shell-bg) 64%, transparent)',
-                            }}
-                        />
-                    </label>
-                </div>
+                ) : null}
 
                 <div
                     className={cn(
@@ -156,19 +170,9 @@ export function ChatSidebar({
                             : 'mt-0 max-h-0 opacity-0',
                     )}
                 >
-                    <div className="flex items-center justify-between gap-3">
-                        <h2 className="text-sm font-semibold tracking-[0.02em] text-ink">
-                            Conversaciones
-                        </h2>
-                        <button
-                            type="button"
-                            onClick={onNewChat}
-                            aria-label="Iniciar nuevo chat"
-                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
-                        >
-                            <Plus size={18} />
-                        </button>
-                    </div>
+                    <h2 className="text-sm font-semibold tracking-[0.02em] text-ink">
+                        Conversaciones
+                    </h2>
                 </div>
 
                 <div
@@ -203,8 +207,13 @@ export function ChatSidebar({
                     </div>
                 </div>
 
-                {!isOpen ? (
-                    <div className="mt-4 flex flex-col items-center gap-3">
+                {(isOpen || isDesktopLayout) ? (
+                    <div
+                        className={cn(
+                            'mt-auto pt-4 flex',
+                            isOpen ? 'justify-end' : 'justify-center',
+                        )}
+                    >
                         <button
                             type="button"
                             onClick={onNewChat}
