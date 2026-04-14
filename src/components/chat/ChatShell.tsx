@@ -12,6 +12,7 @@ import { BrandLogo } from '../layout/BrandLogo';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { ActionButton } from '../ui/ActionButton';
 import { ChatComposer } from './ChatComposer';
+import { ChatSidebar } from './ChatSidebar';
 import { EmptyChatState } from './EmptyChatState';
 import { MessageBubble } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
@@ -28,8 +29,11 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [draft, setDraft] = useState('');
+    const [isDesktopLayout, setIsDesktopLayout] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const initialHeroQuestionRef = useRef(searchParams.get('q')?.trim() ?? null);
     const hasInitializedChatRef = useRef(false);
+    const hasInitializedSidebarRef = useRef(false);
     const {
         messages,
         isSending,
@@ -75,6 +79,31 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
     }, []);
 
     /**
+     * Uses a wider default sidebar on desktop and a collapsed rail on smaller screens.
+     */
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(min-width: 1024px)');
+
+        const syncSidebarLayout = () => {
+            const isDesktop = mediaQueryList.matches;
+            setIsDesktopLayout(isDesktop);
+
+            if (hasInitializedSidebarRef.current) {
+                return;
+            }
+
+            hasInitializedSidebarRef.current = true;
+            setIsSidebarOpen(isDesktop);
+        };
+
+        syncSidebarLayout();
+
+        mediaQueryList.addEventListener('change', syncSidebarLayout);
+        return () =>
+            mediaQueryList.removeEventListener('change', syncSidebarLayout);
+    }, []);
+
+    /**
      * Always starts the chat route with a fresh conversation.
      * If the landing passed ?q=..., that query becomes the first message of the new chat.
      */
@@ -98,6 +127,19 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
         void submitMessage(heroQuestion);
         router.replace(pathname);
     }, [cancelPendingRequest, pathname, resetConversation, router, submitMessage]);
+
+    /**
+     * Resets the chat state so the empty suggestions screen becomes the starting point again.
+     */
+    const resetChatSession = () => {
+        cancelPendingRequest();
+        window.localStorage.removeItem(chatStorageKey);
+        resetConversation();
+        setDraft('');
+        setAnimatedAssistantId(null);
+        scrollStateRef.current = null;
+        consumedQueryRef.current = initialHeroQuestionRef.current;
+    };
 
     /**
      * Smoothly scrolls down when the typing state appears and when a new assistant reply is appended.
@@ -197,29 +239,46 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
     };
 
     /**
+     * Starts a brand new local conversation and returns to the suggestion prompts.
+     */
+    const handleNewChat = () => {
+        resetChatSession();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    /**
      * Clears the current conversation before returning to the landing page.
      */
     const handleBackToHome = (event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
-        cancelPendingRequest();
-        window.localStorage.removeItem(chatStorageKey);
-        resetConversation();
+        resetChatSession();
         router.push('/');
     };
 
-    const hasIncomingHeroQuestion = Boolean(initialHeroQuestionRef.current);
+    const hasIncomingHeroQuestion = Boolean(
+        initialHeroQuestionRef.current && !consumedQueryRef.current,
+    );
     const isEmptyState =
         messages.length === 0 && !isSending && !hasIncomingHeroQuestion;
+    const desktopSidebarWidth = isSidebarOpen ? 304 : 76;
+    const contentLeftInset = isDesktopLayout ? desktopSidebarWidth : 76;
 
     return (
         <div className="chat-main text-ink">
+            <ChatSidebar
+                isOpen={isSidebarOpen}
+                onToggle={() => setIsSidebarOpen(current => !current)}
+                onNewChat={handleNewChat}
+            />
+
             <div className="chat-theme-toggle-fixed hidden sm:block">
                 <ThemeToggle />
             </div>
 
             <header
-                className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b pt-[18px] backdrop-blur-sm"
+                className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b pt-[18px] backdrop-blur-sm transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 style={{
+                    left: `${contentLeftInset}px`,
                     borderColor: 'var(--chat-header-border)',
                     backgroundColor: 'var(--navbar-bg)',
                     paddingRight: 'var(--page-scrollbar-offset, 0px)',
@@ -239,7 +298,13 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
                 </div>
             </header>
 
-            <div style={{ paddingRight: 'var(--page-scrollbar-offset, 0px)' }}>
+            <div
+                className="transition-[padding-left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{
+                    paddingLeft: `${contentLeftInset}px`,
+                    paddingRight: 'var(--page-scrollbar-offset, 0px)',
+                }}
+            >
                 <main
                     className={`chat-content-entrance relative mx-auto w-full max-w-4xl px-4 !pb-28 pt-24 sm:px-6 sm:!pb-28 lg:px-8 ${
                         isEmptyState
@@ -289,8 +354,11 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
             </div>
 
             <div
-                className="chat-composer-entrance fixed inset-x-0 bottom-0 z-40 py-4"
-                style={{ paddingRight: 'var(--page-scrollbar-offset, 0px)' }}
+                className="chat-composer-entrance fixed inset-x-0 bottom-0 z-40 py-4 transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{
+                    left: `${contentLeftInset}px`,
+                    paddingRight: 'var(--page-scrollbar-offset, 0px)',
+                }}
             >
                 <div className="chat-composer-motion mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
                     <div className="chat-composer-stage">
