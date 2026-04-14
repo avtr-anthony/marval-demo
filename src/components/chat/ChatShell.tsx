@@ -286,17 +286,12 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
             <ChatSidebar
                 isDesktopLayout={isDesktopLayout}
                 isOpen={isSidebarOpen}
-                onOpen={() => setIsSidebarOpen(true)}
                 onToggle={() => setIsSidebarOpen(current => !current)}
                 onNewChat={handleNewChat}
             />
 
-            <div className="chat-theme-toggle-fixed hidden sm:block">
-                <ThemeToggle />
-            </div>
-
             <header
-                className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b pt-[18px] backdrop-blur-sm transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="chat-header-entrance fixed inset-x-0 top-0 z-40 border-b backdrop-blur-sm transition-[left] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 style={{
                     left: `${contentLeftInset}px`,
                     borderColor: 'var(--chat-header-border)',
@@ -304,26 +299,35 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
                     paddingRight: 'var(--page-scrollbar-offset, 0px)',
                 }}
             >
-                <div className="mx-auto grid h-[60px] w-full max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 sm:gap-4 sm:px-6">
-                    <div className="flex items-center">
+                <div className="flex min-h-[78px] w-full items-center justify-between gap-4 px-4 sm:px-6">
+                    <div className="flex min-w-0 items-center gap-3">
+                        <BrandLogo
+                            href="/"
+                            plainIcon
+                            onClick={handleBackToHome}
+                            className="shrink-0"
+                            markClassName="h-8 w-[6.75rem] sm:h-9 sm:w-[7.5rem]"
+                        />
+                        <div className="min-w-0">
+                            <p className="truncate text-sm font-semibold text-ink sm:text-base">
+                                Marval Bot
+                            </p>
+                            <p className="truncate text-[10px] font-medium uppercase tracking-[0.18em] text-ink-dim sm:text-[11px]">
+                                Asistente fiscal
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-3">
                         {hasResolvedViewportLayout && !isDesktopLayout ? (
                             <button
                                 type="button"
                                 onClick={() => setIsSidebarOpen(true)}
                                 aria-label="Mostrar barra de conversaciones"
-                                className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
+                                className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-[var(--chat-sidebar-control-text)] transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)] hover:text-[var(--chat-sidebar-control-hover-text)]"
                             >
                                 <PanelLeftOpen size={18} />
                             </button>
                         ) : null}
-                    </div>
-                    <BrandLogo
-                        href="/"
-                        plainIcon
-                        onClick={handleBackToHome}
-                        className="justify-self-center"
-                    />
-                    <div className="flex justify-end sm:hidden">
                         <ThemeToggle />
                     </div>
                 </div>
@@ -337,7 +341,7 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
                 }}
             >
                 <main
-                    className={`chat-content-entrance relative mx-auto w-full max-w-4xl px-4 !pb-28 pt-24 sm:px-6 sm:!pb-28 lg:px-8 ${
+                    className={`chat-content-entrance relative mx-auto w-full max-w-4xl px-4 !pb-28 pt-28 sm:px-6 sm:!pb-28 lg:px-8 ${
                         isIntroOnlyState
                             ? 'min-h-[calc(100vh-13rem)] !pb-36'
                             : ''

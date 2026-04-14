@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import {
     ChevronRight,
@@ -15,7 +15,6 @@ import { cn } from '@/utils/cn';
 interface ChatSidebarProps {
     isDesktopLayout: boolean;
     isOpen: boolean;
-    onOpen: () => void;
     onToggle: () => void;
     onNewChat: () => void;
 }
@@ -23,31 +22,37 @@ interface ChatSidebarProps {
 const mockConversations = [
     {
         title: 'Ingresos Brutos 2026',
+        age: '15m',
         preview:
             'La respuesta revisó alícuotas vigentes, padrón y cómo impacta la actividad declarada.',
     },
     {
         title: 'Plan de pagos',
+        age: '1h',
         preview:
             'Se resumieron requisitos, vigencia del régimen y documentación sugerida para adherir.',
     },
     {
         title: 'Convenio Multilateral',
+        age: '3h',
         preview:
             'Se explicó el criterio de atribución y qué revisar antes de presentar la DJ mensual.',
     },
     {
         title: 'Exención inmobiliaria',
+        age: '2d',
         preview:
             'El ejemplo mostró cuándo aplica la exención y qué constancias conviene reunir primero.',
     },
     {
         title: 'Agente de retención',
+        age: '1w',
         preview:
             'La conversación detalló altas, retenciones informadas y controles previos al cierre.',
     },
     {
         title: 'Fiscalización abierta',
+        age: '4d',
         preview:
             'Se listaron pasos iniciales, plazos habituales y foco documental para responder mejor.',
     },
@@ -59,34 +64,10 @@ const mockConversations = [
 export function ChatSidebar({
     isDesktopLayout,
     isOpen,
-    onOpen,
     onToggle,
     onNewChat,
 }: ChatSidebarProps) {
     const [searchValue, setSearchValue] = useState('');
-    const [shouldFocusSearch, setShouldFocusSearch] = useState(false);
-    const searchInputRef = useRef<HTMLInputElement | null>(null);
-
-    useEffect(() => {
-        if (!isOpen || !shouldFocusSearch) {
-            return;
-        }
-
-        const focusSearch = () => {
-            searchInputRef.current?.focus();
-            const length = searchInputRef.current?.value.length ?? 0;
-            searchInputRef.current?.setSelectionRange(length, length);
-            setShouldFocusSearch(false);
-        };
-
-        const animationFrameId = requestAnimationFrame(focusSearch);
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [isOpen, shouldFocusSearch]);
-
-    const handleSearchShortcutClick = () => {
-        setShouldFocusSearch(true);
-        onOpen();
-    };
 
     return (
         <aside
@@ -108,23 +89,37 @@ export function ChatSidebar({
         >
             <div className="flex h-full flex-col px-3 py-4 sm:px-4 sm:py-5">
                 {isOpen ? (
-                    <div className="flex items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={onToggle}
-                            aria-label="Ocultar barra de conversaciones"
-                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
-                        >
-                            <PanelLeftClose size={18} />
-                        </button>
+                    <>
+                        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={onToggle}
+                                aria-label="Ocultar barra de conversaciones"
+                                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-[var(--chat-sidebar-control-text)] transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)] hover:text-[var(--chat-sidebar-control-hover-text)]"
+                            >
+                                <PanelLeftClose size={18} />
+                            </button>
 
-                        <label className="relative block flex-1">
+                            <p className="truncate text-sm font-semibold tracking-[0.02em] text-ink">
+                                Chats
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={onNewChat}
+                                aria-label="Iniciar nuevo chat"
+                                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-plus-bg)] text-[var(--chat-sidebar-plus-text)] transition duration-300 hover:bg-[var(--chat-sidebar-plus-hover-bg)] hover:text-[var(--chat-sidebar-plus-hover-text)]"
+                            >
+                                <Plus size={18} />
+                            </button>
+                        </div>
+
+                        <label className="relative mt-4 block">
                             <Search
                                 size={16}
                                 className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-dim"
                             />
                             <input
-                                ref={searchInputRef}
                                 value={searchValue}
                                 onChange={event =>
                                     setSearchValue(event.target.value)
@@ -139,25 +134,21 @@ export function ChatSidebar({
                                 }}
                             />
                         </label>
-                    </div>
+
+                        <div
+                            className="mt-4 border-t"
+                            style={{ borderColor: 'var(--chat-header-border)' }}
+                        />
+                    </>
                 ) : isDesktopLayout ? (
-                    <div className="flex flex-col items-center gap-3">
+                    <div className="flex flex-col items-center">
                         <button
                             type="button"
                             onClick={onToggle}
                             aria-label="Mostrar barra de conversaciones"
-                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
+                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-[var(--chat-sidebar-control-text)] transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)] hover:text-[var(--chat-sidebar-control-hover-text)]"
                         >
                             <PanelLeftOpen size={18} />
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={handleSearchShortcutClick}
-                            aria-label="Abrir búsqueda"
-                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
-                        >
-                            <Search size={18} />
                         </button>
                     </div>
                 ) : null}
@@ -166,12 +157,12 @@ export function ChatSidebar({
                     className={cn(
                         'overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
                         isOpen
-                            ? 'mt-5 max-h-20 opacity-100'
+                            ? 'mt-4 max-h-20 opacity-100'
                             : 'mt-0 max-h-0 opacity-0',
                     )}
                 >
-                    <h2 className="text-sm font-semibold tracking-[0.02em] text-ink">
-                        Conversaciones
+                    <h2 className="text-[13px] font-semibold tracking-[0.02em] text-ink">
+                        Recent
                     </h2>
                 </div>
 
@@ -191,10 +182,15 @@ export function ChatSidebar({
                                 className="group flex w-full items-center gap-3 rounded-[20px] border border-transparent bg-[var(--chat-suggestion-bg)] px-4 py-3 text-left text-[var(--chat-suggestion-text)] shadow-none transition duration-300 hover:bg-[var(--chat-suggestion-bg-hover)] hover:text-[var(--chat-suggestion-text-hover)]"
                             >
                                 <div className="min-w-0 flex-1">
-                                    <p className="truncate text-sm font-semibold">
-                                        {conversation.title}
-                                    </p>
-                                    <p className="mt-1 truncate text-xs leading-5 text-[var(--chat-suggestion-text-muted)] transition duration-300 group-hover:text-[var(--chat-suggestion-text-muted-hover)]">
+                                    <div className="flex items-start gap-3">
+                                        <p className="min-w-0 flex-1 truncate text-[13px] font-semibold">
+                                            {conversation.title}
+                                        </p>
+                                        <span className="shrink-0 pt-0.5 text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--chat-suggestion-text-muted)] transition duration-300 group-hover:text-[var(--chat-suggestion-text-muted-hover)]">
+                                            {conversation.age}
+                                        </span>
+                                    </div>
+                                    <p className="mt-1 truncate text-[11px] leading-5 text-[var(--chat-suggestion-text-muted)] transition duration-300 group-hover:text-[var(--chat-suggestion-text-muted-hover)]">
                                         {conversation.preview}
                                     </p>
                                 </div>
@@ -207,18 +203,13 @@ export function ChatSidebar({
                     </div>
                 </div>
 
-                {(isOpen || isDesktopLayout) ? (
-                    <div
-                        className={cn(
-                            'mt-auto pt-4 flex',
-                            isOpen ? 'justify-end' : 'justify-center',
-                        )}
-                    >
+                {isDesktopLayout && !isOpen ? (
+                    <div className="mt-auto flex justify-center pt-4">
                         <button
                             type="button"
                             onClick={onNewChat}
                             aria-label="Iniciar nuevo chat"
-                            className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-control-bg)] text-ink transition duration-300 hover:bg-[var(--chat-sidebar-control-bg-hover)]"
+                            className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[var(--color-stroke-soft)] bg-[var(--chat-sidebar-plus-bg)] text-[var(--chat-sidebar-plus-text)] transition duration-300 hover:bg-[var(--chat-sidebar-plus-hover-bg)] hover:text-[var(--chat-sidebar-plus-hover-text)]"
                         >
                             <Plus size={18} />
                         </button>

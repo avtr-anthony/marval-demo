@@ -11,6 +11,11 @@ interface BrandLogoProps {
     iconOnly?: boolean;
     plainIcon?: boolean;
     className?: string;
+    markClassName?: string;
+    title?: string;
+    subtitle?: string;
+    titleClassName?: string;
+    subtitleClassName?: string;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
@@ -23,13 +28,22 @@ export function BrandLogo({
     iconOnly,
     plainIcon,
     className,
+    markClassName,
+    title,
+    subtitle,
+    titleClassName,
+    subtitleClassName,
     onClick,
 }: BrandLogoProps) {
     return (
         <Link
             href={href}
             onClick={onClick}
-            className={cn('inline-flex items-center leading-none', className)}
+            className={cn(
+                'inline-flex items-center leading-none',
+                !iconOnly && (title || subtitle) && 'gap-3',
+                className,
+            )}
         >
             <span
                 className={cn(
@@ -39,6 +53,7 @@ export function BrandLogo({
                         : iconOnly
                           ? 'h-10 w-[8.25rem] rounded-pill border border-white/25 bg-white/10 px-3 text-white'
                           : 'h-11 w-[9rem] rounded-pill border border-accent/30 bg-accent/10 px-3 text-accent',
+                    markClassName,
                 )}
             >
                 <Image
@@ -50,13 +65,36 @@ export function BrandLogo({
                     className="brand-logo-image h-auto w-full object-contain"
                 />
             </span>
-            {!iconOnly ? (
+            {!iconOnly && (title || subtitle) ? (
                 <span
                     className={cn(
-                        'leading-tight',
-                        compact ? 'hidden sm:block' : 'block',
+                        'min-w-0 leading-tight',
+                        compact
+                            ? 'hidden sm:flex sm:flex-col'
+                            : 'flex flex-col',
                     )}
-                ></span>
+                >
+                    {title ? (
+                        <span
+                            className={cn(
+                                'text-sm font-semibold text-ink',
+                                titleClassName,
+                            )}
+                        >
+                            {title}
+                        </span>
+                    ) : null}
+                    {subtitle ? (
+                        <span
+                            className={cn(
+                                ' text-[10px] font-medium uppercase tracking-[0.16em] text-ink-dim',
+                                subtitleClassName,
+                            )}
+                        >
+                            {subtitle}
+                        </span>
+                    ) : null}
+                </span>
             ) : null}
         </Link>
     );
