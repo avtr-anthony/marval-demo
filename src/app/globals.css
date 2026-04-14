@@ -37,10 +37,10 @@
     --chat-sidebar-control-bg-hover: var(--chat-suggestion-bg-hover);
     --chat-sidebar-control-text: var(--chat-suggestion-text);
     --chat-sidebar-control-hover-text: var(--chat-suggestion-text-hover);
-    --chat-sidebar-plus-bg: #8f97a54d;
-    --chat-sidebar-plus-hover-bg: #121a28;
-    --chat-sidebar-plus-text: #f8fafc;
-    --chat-sidebar-plus-hover-text: #f8fafc;
+    --chat-sidebar-plus-bg: #f6f8fc;
+    --chat-sidebar-plus-hover-bg: #d8e0ec;
+    --chat-sidebar-plus-text: #121a28;
+    --chat-sidebar-plus-hover-text: #121a28;
     --landing-base-start: #07080c;
     --landing-base-mid: #040405;
     --landing-base-end: #040405;
@@ -113,9 +113,9 @@
     --chat-sidebar-control-text: var(--chat-suggestion-text);
     --chat-sidebar-control-hover-text: var(--chat-suggestion-text-hover);
     --chat-sidebar-plus-bg: #121a28;
-    --chat-sidebar-plus-hover-bg: #1a2740;
+    --chat-sidebar-plus-hover-bg: #253657;
     --chat-sidebar-plus-text: #f8fafc;
-    --chat-sidebar-plus-hover-text: #ffffff;
+    --chat-sidebar-plus-hover-text: #f8fafc;
     --landing-base-start: #f9fbff;
     --landing-base-mid: #f4f6fa;
     --landing-base-end: #eef2f7;
