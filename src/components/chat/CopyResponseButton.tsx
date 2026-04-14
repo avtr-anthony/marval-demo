@@ -3,14 +3,20 @@
 import { Check, Copy } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { cn } from '@/utils/cn';
+
 interface CopyResponseButtonProps {
     content: string;
+    className?: string;
 }
 
 /**
  * Copies one assistant response and briefly swaps the icon to confirm success.
  */
-export function CopyResponseButton({ content }: CopyResponseButtonProps) {
+export function CopyResponseButton({
+    content,
+    className,
+}: CopyResponseButtonProps) {
     const [copied, setCopied] = useState(false);
     const copyTimeoutRef = useRef<number | null>(null);
 
@@ -42,7 +48,10 @@ export function CopyResponseButton({ content }: CopyResponseButtonProps) {
         <button
             type="button"
             onClick={handleCopy}
-            className="absolute right-3 top-3 inline-flex h-7 w-7 items-center justify-center rounded-pill border border-stroke-soft bg-white/5 text-ink-dim transition hover:bg-white/10 hover:text-ink"
+            className={cn(
+                'inline-flex h-7 w-7 items-center justify-center rounded-pill border border-stroke-soft bg-white/5 text-ink-dim transition hover:bg-white/10 hover:text-ink',
+                className,
+            )}
             aria-label={copied ? 'Respuesta copiada' : 'Copiar respuesta'}
             title={copied ? 'Respuesta copiada' : 'Copiar respuesta'}
         >

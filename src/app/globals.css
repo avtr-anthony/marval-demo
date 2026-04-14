@@ -32,6 +32,7 @@
     --chat-suggestion-text-hover: #ffffff;
     --chat-suggestion-text-muted: rgba(245, 245, 245, 0.66);
     --chat-suggestion-text-muted-hover: rgba(255, 255, 255, 0.82);
+    --chat-bot-avatar-bg: var(--assistant-response-bg);
     --chat-sidebar-control-bg: color-mix(in srgb, var(--composer-shell-bg) 72%, transparent);
     --chat-sidebar-control-bg-hover: var(--chat-suggestion-bg);
     --landing-base-start: #07080c;
@@ -99,6 +100,7 @@
     --chat-suggestion-text-hover: var(--hero-cta-text);
     --chat-suggestion-text-muted: rgba(18, 26, 40, 0.72);
     --chat-suggestion-text-muted-hover: rgba(248, 250, 252, 0.82);
+    --chat-bot-avatar-bg: var(--chat-suggestion-bg);
     --chat-sidebar-control-bg: color-mix(in srgb, var(--composer-shell-bg) 76%, transparent);
     --chat-sidebar-control-bg-hover: rgba(143, 151, 165, 0.18);
     --landing-base-start: #f9fbff;
@@ -196,6 +198,20 @@
     }
   }
 
+  @keyframes chat-intro-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+      filter: blur(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
   @keyframes assistant-response-enter {
     from {
       clip-path: inset(0 0 100% 0 round var(--radius-card));
@@ -275,6 +291,12 @@
     animation: chat-content-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
   }
 
+  .chat-intro-slide-up {
+    opacity: 0;
+    animation: chat-intro-slide-up 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity, filter;
+  }
+
   .chat-composer-entrance {
     animation: none;
   }
@@ -323,6 +345,7 @@
 
     .chat-header-entrance,
     .chat-content-entrance,
+    .chat-intro-slide-up,
     .chat-composer-entrance,
     .chat-composer-motion,
     .chat-composer-stage,
