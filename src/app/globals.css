@@ -177,7 +177,7 @@
     position: relative;
     isolation: isolate;
     min-height: 100vh;
-    background-size: 100% 220vh;
+    background-size: 100% 100vh;
     background-position: center top;
     background-repeat: no-repeat;
     background-attachment: fixed;
