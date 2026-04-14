@@ -16,7 +16,7 @@
 }
 
 .button:hover {
-  transform: translateY(-1px);
+  background: var(--theme-toggle-hover-bg);
 }
 
 .button:focus-visible {

@@ -33,8 +33,14 @@
     --chat-suggestion-text-muted: rgba(245, 245, 245, 0.66);
     --chat-suggestion-text-muted-hover: rgba(255, 255, 255, 0.82);
     --chat-bot-avatar-bg: var(--assistant-response-bg);
-    --chat-sidebar-control-bg: color-mix(in srgb, var(--composer-shell-bg) 72%, transparent);
-    --chat-sidebar-control-bg-hover: var(--chat-suggestion-bg);
+    --chat-sidebar-control-bg: var(--chat-suggestion-bg);
+    --chat-sidebar-control-bg-hover: var(--chat-suggestion-bg-hover);
+    --chat-sidebar-control-text: var(--chat-suggestion-text);
+    --chat-sidebar-control-hover-text: var(--chat-suggestion-text-hover);
+    --chat-sidebar-plus-bg: #8f97a54d;
+    --chat-sidebar-plus-hover-bg: #121a28;
+    --chat-sidebar-plus-text: #f8fafc;
+    --chat-sidebar-plus-hover-text: #f8fafc;
     --landing-base-start: #07080c;
     --landing-base-mid: #040405;
     --landing-base-end: #040405;
@@ -46,6 +52,7 @@
     --navbar-text: #cfd4dc;
     --navbar-text-hover: #ffffff;
     --theme-toggle-bg: rgba(255, 255, 255, 0.02);
+    --theme-toggle-hover-bg: var(--chat-suggestion-bg-hover);
     --theme-toggle-border: rgba(255, 255, 255, 0.08);
     --theme-toggle-icon: #f5f5f5;
     --faq-badge-bg: #ffffff;
@@ -101,8 +108,14 @@
     --chat-suggestion-text-muted: rgba(18, 26, 40, 0.72);
     --chat-suggestion-text-muted-hover: rgba(248, 250, 252, 0.82);
     --chat-bot-avatar-bg: var(--chat-suggestion-bg);
-    --chat-sidebar-control-bg: color-mix(in srgb, var(--composer-shell-bg) 76%, transparent);
-    --chat-sidebar-control-bg-hover: rgba(143, 151, 165, 0.18);
+    --chat-sidebar-control-bg: var(--chat-suggestion-bg);
+    --chat-sidebar-control-bg-hover: var(--chat-suggestion-bg-hover);
+    --chat-sidebar-control-text: var(--chat-suggestion-text);
+    --chat-sidebar-control-hover-text: var(--chat-suggestion-text-hover);
+    --chat-sidebar-plus-bg: #121a28;
+    --chat-sidebar-plus-hover-bg: #1a2740;
+    --chat-sidebar-plus-text: #f8fafc;
+    --chat-sidebar-plus-hover-text: #ffffff;
     --landing-base-start: #f9fbff;
     --landing-base-mid: #f4f6fa;
     --landing-base-end: #eef2f7;
@@ -114,6 +127,7 @@
     --navbar-text: #4d5868;
     --navbar-text-hover: #111827;
     --theme-toggle-bg: rgba(17, 24, 39, 0.03);
+    --theme-toggle-hover-bg: var(--chat-suggestion-bg);
     --theme-toggle-border: rgba(18, 24, 38, 0.1);
     --theme-toggle-icon: #111827;
     --faq-badge-bg: #121a28;
@@ -364,20 +378,6 @@
     overflow: hidden;
     opacity: 0;
     animation: chat-composer-shell-reveal 0.26s ease-out 0.5s both;
-  }
-
-  .chat-theme-toggle-fixed {
-    position: fixed;
-    top: 1rem;
-    right: calc(1rem + var(--page-scrollbar-offset, 0px));
-    z-index: 60;
-  }
-
-  @media (min-width: 640px) {
-    .chat-theme-toggle-fixed {
-      top: 1.25rem;
-      right: calc(1.5rem + var(--page-scrollbar-offset, 0px));
-    }
   }
 
   .font-serif {
