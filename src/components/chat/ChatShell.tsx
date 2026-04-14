@@ -38,7 +38,9 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
         useState(false);
     const [isDesktopLayout, setIsDesktopLayout] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const initialHeroQuestionRef = useRef(searchParams.get('q')?.trim() ?? null);
+    const initialHeroQuestionRef = useRef(
+        searchParams.get('q')?.trim() ?? null,
+    );
     const hasInitializedChatRef = useRef(false);
     const hasInitializedSidebarRef = useRef(false);
     const {
@@ -134,7 +136,13 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
         consumedQueryRef.current = heroQuestion;
         void submitMessage(heroQuestion);
         router.replace(pathname);
-    }, [cancelPendingRequest, pathname, resetConversation, router, submitMessage]);
+    }, [
+        cancelPendingRequest,
+        pathname,
+        resetConversation,
+        router,
+        submitMessage,
+    ]);
 
     /**
      * Resets the chat state so the empty suggestions screen becomes the starting point again.
