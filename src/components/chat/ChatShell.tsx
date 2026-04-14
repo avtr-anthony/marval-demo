@@ -213,7 +213,7 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
 
     return (
         <div className="chat-main text-ink">
-            <div className="chat-theme-toggle-fixed pr-[15px]">
+            <div className="chat-theme-toggle-fixed hidden sm:block">
                 <ThemeToggle />
             </div>
 
@@ -225,7 +225,7 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
                     paddingRight: 'var(--page-scrollbar-offset, 0px)',
                 }}
             >
-                <div className="mx-auto grid h-[60px] w-full max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 !pr-[38px]">
+                <div className="mx-auto grid h-[60px] w-full max-w-[42rem] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 sm:gap-4 sm:px-6">
                     <div />
                     <BrandLogo
                         href="/"
@@ -233,7 +233,9 @@ export function ChatShell({ starterPrompts }: ChatShellProps) {
                         onClick={handleBackToHome}
                         className="justify-self-center"
                     />
-                    <div />
+                    <div className="flex justify-end sm:hidden">
+                        <ThemeToggle />
+                    </div>
                 </div>
             </header>
 
