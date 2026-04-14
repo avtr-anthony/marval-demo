@@ -124,8 +124,8 @@ export function ChatSidebar({
                                 onChange={event =>
                                     setSearchValue(event.target.value)
                                 }
-                                aria-label="Buscar conversaciones"
-                                placeholder="Buscar conversaciones"
+                                aria-label="Buscar chats"
+                                placeholder="Buscar chats"
                                 className="h-12 w-full rounded-[18px] border bg-transparent pl-11 pr-4 text-sm text-ink outline-none placeholder:text-ink-dim"
                                 style={{
                                     borderColor: 'var(--color-stroke-soft)',
