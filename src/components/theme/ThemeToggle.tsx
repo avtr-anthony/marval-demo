@@ -16,8 +16,9 @@ function resolveInitialTheme(): ThemeMode {
         return defaultThemeMode;
     }
 
-    return document.documentElement.dataset.theme === 'light'
-        ? 'light'
+    const current = document.documentElement.dataset.theme;
+    return current === 'dark' || current === 'light'
+        ? current
         : defaultThemeMode;
 }
 
