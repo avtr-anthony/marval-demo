@@ -66,7 +66,9 @@ export function ChatComposer({
 
         if (shouldSubmit) {
             event.preventDefault();
-            await onSubmit();
+            if (!disabled) {
+                await onSubmit();
+            }
         }
     };
 
