@@ -180,6 +180,7 @@
     background-size: 100% 220vh;
     background-position: center top;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     background-image:
       radial-gradient(ellipse 90% 55% at 50% -5%, var(--landing-glow-primary) 0%, transparent 68%),
       radial-gradient(ellipse 65% 45% at 25% 18%, var(--landing-glow-secondary) 0%, transparent 55%),
