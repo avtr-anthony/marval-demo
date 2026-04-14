@@ -7,6 +7,7 @@ import type { ChatMessage } from '@/types/chat';
 import { cn } from '@/utils/cn';
 
 import { CopyResponseButton } from './CopyResponseButton';
+import { MessageContent } from './MessageContent';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -93,9 +94,7 @@ export function MessageBubble({
                                 'assistant-response-enter',
                         )}
                     >
-                        <p className="whitespace-pre-wrap break-words leading-6">
-                            {message.content}
-                        </p>
+                        <MessageContent content={message.content} />
 
                         {children ? (
                             <div className="mt-3.5">{children}</div>
